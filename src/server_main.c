@@ -1,6 +1,5 @@
 #include "game_state.h"
 #include "server_socket.h"
-#include "client_socket.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
