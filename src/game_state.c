@@ -5,6 +5,17 @@
 #include <unistd.h>
 #include <sys/socket.h>
 
+static GameState* _game_state_init(int game_over, int current_player) {
+    GameState* game_state = (GameState*) malloc(sizeof(GameState));
+    if (game_state == NULL) {
+        perror("Failed to allocate memory for GameState");
+        return NULL;
+    }
+    game_state->game_over = game_over;
+    game_state->current_player_index = current_player;
+    return game_state;
+}
+
 GameState* game_state_init(void) {
     GameState* game_state_without_board = _game_state_init(0, 0);
     if (game_state_without_board == NULL) {
@@ -16,17 +27,6 @@ GameState* game_state_init(void) {
         game_state_without_board->players[i].marker = i == 0 ? PLAYER1 : PLAYER2;
     }
     return game_state_without_board;
-}
-
-static GameState* _game_state_init(int game_over, int current_player) {
-    GameState* game_state = (GameState*) malloc(sizeof(GameState));
-    if (game_state == NULL) {
-        perror("Failed to allocate memory for GameState");
-        return NULL;
-    }
-    game_state->game_over = game_over;
-    game_state->current_player_index = current_player;
-    return game_state;
 }
 
 int _check_winner_row(GameState* game_state, int row, int column) {
@@ -83,7 +83,6 @@ int game_state_make_move(GameState* game_state, int column) {
     for (int row = BOARD_ROWS - 1; row >= 0; row--) {
         if (game_state->board[row][column] == EMPTY) {
             game_state->board[row][column] = game_state->current_player_index == 0 ? PLAYER1 : PLAYER2;
-            game_state->current_player_index = (game_state->current_player_index + 1) % MAX_PLAYERS;
             return 1;
         }
     }
