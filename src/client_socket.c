@@ -18,11 +18,11 @@ void client_socket_init(void) {
     server_address.sin_family = AF_INET;
     server_address.sin_port = htons(SERVER_PORT);
     if (inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr) <= 0) {
-        printf("Invalid address");
+        perror("Invalid address");
         return;
     }
     if ((connect(socket_fd, (struct sockaddr*)&server_address, sizeof(server_address))) < 0) {
-        printf("Connection failed");
+        perror("Connection failed");
         return;
     }
 }

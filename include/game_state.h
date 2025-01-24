@@ -41,6 +41,8 @@ int game_state_serialize(const GameState *game_state, char *buffer, size_t buffe
 
 GameState* game_state_deserialize(char* buffer, size_t buffer_size);
 
+void game_state_print(GameState* game_state);
+
 void game_state_close(GameState** game_state);
 
 #endif // GAME_STATE_H

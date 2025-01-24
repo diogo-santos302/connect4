@@ -3,14 +3,24 @@
 #include <stdio.h>
 
 int main(void) {
-    printf("Starting client...");
+    printf("Starting client...\n");
     client_socket_init();
     char message[BUFFER_SIZE] = {0};
-    GameState* game_state;
-    do {
+    client_socket_read(message);
+    GameState* game_state = game_state_deserialize(message, BUFFER_SIZE);
+    game_state_print(game_state);
+    printf("You play as %c\n", game_state->current_player_index == 0 ? PLAYER1 : PLAYER2);
+    int column;
+    while (!game_state->game_over) {
+        scanf("Column: %d\n", &column);
+        if (column < 1 || column > BOARD_COLS) {
+            printf("Invalid column\n");
+            continue;
+        }
         client_socket_read(message);
         game_state = game_state_deserialize(message, BUFFER_SIZE);
-    } while (!game_state->game_over);
+        game_state_print(game_state);
+    } 
     client_socket_close();
     return 0;
 }

@@ -22,26 +22,28 @@ int main() {
         game_state_close(&game_state);
         return 1;
     }
-    printf("Client 1 connected\n");
-
     game_state->players[0].socket_fd = client_fd1;
     game_state->players[0].marker = PLAYER1;
-    
+    printf("Client 1 connected\n");
+
     int client_fd2 = server_socket_accept();
     if (client_fd2 < 0) {
         fprintf(stderr, "Failed to accept client 2.\n");
         game_state_close(&game_state);
         return 2;
     }
-    printf("Client 2 connected\n");
-
     game_state->players[1].socket_fd = client_fd2;
     game_state->players[1].marker = PLAYER2;
+    printf("Client 2 connected\n");
 
     char message[BUFFER_SIZE] = {0};
     while (!game_state->game_over) {
-        game_state_serialize(game_state, message, BUFFER_SIZE);
+        game_state_print(game_state);
+        int result = game_state_serialize(game_state, message, BUFFER_SIZE);
+        game_state = game_state_deserialize(message, BUFFER_SIZE);
+        game_state_print(game_state);
         server_socket_send(game_state->players[game_state->current_player_index].socket_fd, message);
+        printf("Sent");
         server_socket_read(game_state->players[game_state->current_player_index].socket_fd, message);
         if (message[0] == '\0') continue;
         int column = message[0] - '0';

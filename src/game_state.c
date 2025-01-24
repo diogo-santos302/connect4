@@ -109,7 +109,7 @@ int game_state_serialize(const GameState *game_state, char *buffer, size_t buffe
         memcpy(cursor, game_state->board[i], BOARD_COLS);
         cursor += BOARD_COLS;
     }
-    return cursor - buffer;
+    return required_size;
 }
 
 GameState* game_state_deserialize(char* buffer, size_t buffer_size) {
@@ -139,6 +139,16 @@ GameState* game_state_deserialize(char* buffer, size_t buffer_size) {
     }
     return game_state;
 }
+
+void game_state_print(GameState* game_state) {
+    for (int row = 0; row < BOARD_ROWS; row++) {
+        for (int col = 0; col < BOARD_COLS; col++) {
+            printf("|%c", game_state->board[row][col]);
+        }
+        printf("|\n");
+    }
+}
+
 
 void game_state_close(GameState **game_state) {
     free(*game_state);
