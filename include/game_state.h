@@ -1,7 +1,7 @@
-#include <stddef.h>
-
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
+
+#include <stddef.h>
 
 #define SEQUENCE 4
 #define BOARD_ROWS 6

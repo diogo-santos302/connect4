@@ -27,17 +27,13 @@ void client_socket_init(void) {
     }
 }
 
-void client_socket_read(char* message) {
-    if (read(socket_fd, message, BUFFER_SIZE) < 0) {
-        perror("Failure reading");
-    }
+int client_socket_read(char* message) {
+    return read(socket_fd, message, BUFFER_SIZE);
 }
 
-void client_socket_send(char* message) {
+int client_socket_send(char* message, ssize_t message_size) {
     const int NO_FLAGS = 0;
-    if (send(socket_fd, message, strlen(message), NO_FLAGS) < 0) {
-        perror("Failure sending");
-    }
+    return send(socket_fd, message, message_size, NO_FLAGS);
 }
 
 void client_socket_close(void) {

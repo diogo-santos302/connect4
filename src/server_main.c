@@ -37,14 +37,16 @@ int main() {
     printf("Client 2 connected\n");
 
     char message[BUFFER_SIZE] = {0};
+    int bytes_written;
     while (!game_state->game_over) {
         game_state_print(game_state);
-        int result = game_state_serialize(game_state, message, BUFFER_SIZE);
-        game_state = game_state_deserialize(message, BUFFER_SIZE);
-        game_state_print(game_state);
-        server_socket_send(game_state->players[game_state->current_player_index].socket_fd, message);
-        printf("Sent");
-        server_socket_read(game_state->players[game_state->current_player_index].socket_fd, message);
+        bytes_written = game_state_serialize(game_state, message, BUFFER_SIZE);
+        printf("Written %d bytes\n", bytes_written);
+        int bytes_sent = server_socket_send(game_state->players[game_state->current_player_index].socket_fd, message, bytes_written);
+        printf("Sent %d bytes\n", bytes_sent);
+        int bytes_received = server_socket_read(game_state->players[game_state->current_player_index].socket_fd, message);
+        printf("Received %d bytes\n", bytes_received);
+        printf("%s\n", message);
         if (message[0] == '\0') continue;
         int column = message[0] - '0';
         if (!game_state_make_move(game_state, column)) continue;
@@ -55,9 +57,9 @@ int main() {
         }
         game_state->current_player_index = (game_state->current_player_index + 1) % MAX_PLAYERS;
     }
-    game_state_serialize(game_state, message, BUFFER_SIZE);
-    server_socket_send(client_fd1, message);
-    server_socket_send(client_fd2, message);
+    bytes_written = game_state_serialize(game_state, message, BUFFER_SIZE);
+    server_socket_send(client_fd1, message, bytes_written);
+    server_socket_send(client_fd2, message, bytes_written);
 
     server_socket_close();
     game_state_close(&game_state);

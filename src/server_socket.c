@@ -43,17 +43,13 @@ int server_socket_accept(void) {
     return client_fd;
 }
 
-void server_socket_read(int client_fd, char* message) {
-    if (read(client_fd, message, BUFFER_SIZE) < 0) {
-        perror("Failure reading");
-    }
+int server_socket_read(int client_fd, char* message) {
+    return read(client_fd, message, BUFFER_SIZE);
 }
 
-void server_socket_send(int client_fd, char* message) {
+int server_socket_send(int client_fd, char* message, ssize_t message_size) {
     const int NO_FLAGS = 0;
-    if (send(client_fd, message, strlen(message), NO_FLAGS) < 0) {
-        perror("Failure sending");
-    }
+    return send(client_fd, message, message_size, NO_FLAGS);
 }
 
 void server_socket_close(void) {

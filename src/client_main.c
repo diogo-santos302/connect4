@@ -17,6 +17,9 @@ int main(void) {
             printf("Invalid column\n");
             continue;
         }
+        char column_message = (char)column;
+        int bytes_sent = client_socket_send(&column_message, sizeof(char));
+        printf("Bytes sent: %d\n", bytes_sent);
         client_socket_read(message);
         game_state = game_state_deserialize(message, BUFFER_SIZE);
         game_state_print(game_state);
