@@ -12,12 +12,14 @@ int main(void) {
     printf("You play as %c\n", game_state->current_player_index == 0 ? PLAYER1 : PLAYER2);
     int column;
     while (!game_state->game_over) {
-        scanf("Column: %d\n", &column);
-        if (column < 1 || column > BOARD_COLS) {
-            printf("Invalid column\n");
+        printf("Column: ");
+        column = getchar();
+        if (column < 1 + '0' || column > BOARD_COLS + '0') {
+            printf("Invalid column (%d)\n", column);
             continue;
         }
-        char column_message = (char)column;
+        char column_message = (char) (column - 1);
+        printf("Message: %c\n", column_message);
         int bytes_sent = client_socket_send(&column_message, sizeof(char));
         printf("Bytes sent: %d\n", bytes_sent);
         client_socket_read(message);
