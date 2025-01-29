@@ -13,7 +13,7 @@ void client_socket_init(void);
 
 int client_socket_read(char* message);
 
-int client_socket_send(char* message, ssize_t message_size);
+int client_socket_send(char* message, size_t message_size);
 
 void client_socket_close(void);
 

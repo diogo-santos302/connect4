@@ -47,7 +47,7 @@ int server_socket_read(int client_fd, char* message) {
     return read(client_fd, message, BUFFER_SIZE);
 }
 
-int server_socket_send(int client_fd, char* message, ssize_t message_size) {
+int server_socket_send(int client_fd, char* message, size_t message_size) {
     const int NO_FLAGS = 0;
     return send(client_fd, message, message_size, NO_FLAGS);
 }

@@ -31,7 +31,7 @@ int client_socket_read(char* message) {
     return read(socket_fd, message, BUFFER_SIZE);
 }
 
-int client_socket_send(char* message, ssize_t message_size) {
+int client_socket_send(char* message, size_t message_size) {
     const int NO_FLAGS = 0;
     return send(socket_fd, message, message_size, NO_FLAGS);
 }

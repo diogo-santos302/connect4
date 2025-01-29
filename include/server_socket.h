@@ -1,7 +1,7 @@
 #ifndef SERVER_SOCKET_H
 #define SERVER_SOCKET_H
 
-#include "stdio.h"
+#include <stdio.h>
 
 #define PORT                4444
 #define MAX_CONNECTIONS     2
@@ -15,7 +15,7 @@ int server_socket_accept(void);
 
 int server_socket_read(int client_fd, char* message);
 
-int server_socket_send(int client_fd, char* message, ssize_t message_size);
+int server_socket_send(int client_fd, char* message, size_t message_size);
 
 void server_socket_close(void);
 
