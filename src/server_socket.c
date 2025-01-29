@@ -55,3 +55,7 @@ int server_socket_send(int client_fd, char* message, ssize_t message_size) {
 void server_socket_close(void) {
     close(socket_fd);
 }
+
+void server_socket_close_client_socket(int client_fd) {
+    close(client_fd);
+}

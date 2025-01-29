@@ -65,6 +65,8 @@ int main() {
     server_socket_send(client_fd1, message, bytes_written);
     server_socket_send(client_fd2, message, bytes_written);
 
+    server_socket_close_client_socket(client_fd1);
+    server_socket_close_client_socket(client_fd2);
     server_socket_close();
     game_state_close(&game_state);
 

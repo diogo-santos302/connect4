@@ -19,4 +19,6 @@ int server_socket_send(int client_fd, char* message, ssize_t message_size);
 
 void server_socket_close(void);
 
+void server_socket_close_client_socket(int client_fd);
+
 #endif // SERVER_SOCKET_H
