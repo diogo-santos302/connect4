@@ -18,7 +18,7 @@ int main(void) {
         column = getchar();
         while (getchar() != '\n');
         if (column < 1 + '0' || column > BOARD_COLS + '0') {
-            printf("Invalid column (%d)\n", column - '0');
+            printf("Invalid column (%d). Try again.\n", column - '0');
             continue;
         }
         column_message = (char) (column - 1);
@@ -41,5 +41,6 @@ int main(void) {
         printf("You lose!\n");
     }
     client_socket_close();
+    game_state_close(&game_state);
     return 0;
 }
