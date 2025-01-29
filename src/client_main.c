@@ -14,14 +14,17 @@ int main(void) {
     int bytes_sent, bytes_received, column;
     char column_message;
     while (!game_state->game_over) {
-        printf("Your turn! Column: ");
-        column = getchar();
-        while (getchar() != '\n');
-        if (column < 1 + '0' || column > BOARD_COLS + '0') {
-            printf("Invalid column (%d). Try again.\n", column - '0');
+        printf("Your turn! Enter column (1-%d): ", BOARD_COLS);
+        if (scanf("%d", &column) != 1) {
+            while (getchar() != '\n');
             continue;
         }
-        column_message = (char) (column - 1);
+        while (getchar() != '\n');
+        if (column < 1 || column > BOARD_COLS) {
+            printf("Invalid column (%d). Try again.\n", column);
+            continue;
+        }
+        column_message = (char) (column - 1 + '0');
         bytes_sent = client_socket_send(&column_message, sizeof(char));
         if (bytes_sent < 0) {
             perror("Internal error. Terminating...\n");
