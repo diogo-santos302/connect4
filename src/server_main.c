@@ -37,25 +37,22 @@ int main() {
     printf("Client 2 connected\n");
 
     char message[BUFFER_SIZE] = {0};
-    int bytes_written;
+    int bytes_written, bytes_sent, bytes_received, column;
     while (!game_state->game_over) {
         game_state_print(game_state);
+        printf("\n");
         bytes_written = game_state_serialize(game_state, message, BUFFER_SIZE);
-        printf("Written %d bytes\n", bytes_written);
-        int bytes_sent = server_socket_send(game_state->players[game_state->current_player_index].socket_fd, message, bytes_written);
-        printf("Sent %d bytes\n", bytes_sent);
+        bytes_sent = server_socket_send(game_state->players[game_state->current_player_index].socket_fd, message, bytes_written);
         if (bytes_sent < 0) {
             perror("Client disconnected!\n");
             break;
         }
-        int bytes_received = server_socket_read(game_state->players[game_state->current_player_index].socket_fd, message);
-        printf("Received %d bytes\n", bytes_received);
-        printf("%s\n", message);
+        bytes_received = server_socket_read(game_state->players[game_state->current_player_index].socket_fd, message);
         if (bytes_received < 0) {
             perror("Internal error. Terminating...\n");
             break;
         }
-        int column = message[0] - '0';
+        column = message[0] - '0';
         if (!game_state_make_move(game_state, column)) continue;
         if (game_state_check_winner(game_state)) {
             game_state->game_over = 1;
