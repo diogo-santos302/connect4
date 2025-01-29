@@ -39,8 +39,6 @@ int main() {
     char message[BUFFER_SIZE] = {0};
     int bytes_written, bytes_sent, bytes_received, column;
     while (!game_state->game_over) {
-        game_state_print(game_state);
-        printf("\n");
         bytes_written = game_state_serialize(game_state, message, BUFFER_SIZE);
         bytes_sent = server_socket_send(game_state->players[game_state->current_player_index].socket_fd, message, bytes_written);
         if (bytes_sent < 0) {
@@ -54,6 +52,8 @@ int main() {
         }
         column = message[0] - '0';
         if (!game_state_make_move(game_state, column)) continue;
+        printf("Client %d's turn:\n", game_state->current_player_index + 1);
+        game_state_print(game_state);
         if (game_state_check_winner(game_state)) {
             game_state->game_over = 1;
             printf("Client %d wins!\n", game_state->current_player_index + 1);
