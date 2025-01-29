@@ -44,9 +44,17 @@ int main() {
         printf("Written %d bytes\n", bytes_written);
         int bytes_sent = server_socket_send(game_state->players[game_state->current_player_index].socket_fd, message, bytes_written);
         printf("Sent %d bytes\n", bytes_sent);
+        if (bytes_sent < 0) {
+            perror("Client disconnected!\n");
+            break;
+        }
         int bytes_received = server_socket_read(game_state->players[game_state->current_player_index].socket_fd, message);
         printf("Received %d bytes\n", bytes_received);
         printf("%s\n", message);
+        if (bytes_received < 0) {
+            perror("Internal error. Terminating...\n");
+            break;
+        }
         int column = message[0] - '0';
         if (!game_state_make_move(game_state, column)) continue;
         if (game_state_check_winner(game_state)) {
