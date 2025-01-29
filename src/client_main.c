@@ -14,6 +14,7 @@ int main(void) {
     while (!game_state->game_over) {
         printf("Column: ");
         column = getchar();
+        while (getchar() != '\n');
         if (column < 1 + '0' || column > BOARD_COLS + '0') {
             printf("Invalid column (%d)\n", column);
             continue;
@@ -22,7 +23,15 @@ int main(void) {
         printf("Message: %c\n", column_message);
         int bytes_sent = client_socket_send(&column_message, sizeof(char));
         printf("Bytes sent: %d\n", bytes_sent);
-        client_socket_read(message);
+        if (bytes_sent < 0) {
+            perror("Internal error. Terminating...");
+            break;
+        }
+        int bytes_received = client_socket_read(message);
+        if (bytes_received < 0) {
+            perror("Internal error. Terminating...");
+            break;
+        }
         game_state = game_state_deserialize(message, BUFFER_SIZE);
         game_state_print(game_state);
     } 

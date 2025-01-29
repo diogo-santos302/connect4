@@ -47,7 +47,6 @@ int main() {
         int bytes_received = server_socket_read(game_state->players[game_state->current_player_index].socket_fd, message);
         printf("Received %d bytes\n", bytes_received);
         printf("%s\n", message);
-        if (message[0] == '\0') continue;
         int column = message[0] - '0';
         if (!game_state_make_move(game_state, column)) continue;
         if (game_state_check_winner(game_state)) {
