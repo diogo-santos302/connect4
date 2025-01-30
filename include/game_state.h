@@ -29,6 +29,8 @@ int game_state_check_winner(GameState* game_state);
 
 int game_state_make_move(GameState* game_state, int column);
 
+int game_state_is_full(GameState* game_state);
+
 /**
  * Serializes the current game state into a buffer.
  * 

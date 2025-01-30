@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 
 #define SWITCH_PLAYER(game_state) ((game_state)->current_player_index = ((game_state)->current_player_index + 1) % MAX_PLAYERS)
+#define DECLARE_PLAYER_TIE(game_state) ((game_state)->current_player_index = -1)
 
 static int handle_client_connection(GameState* game_state) {
     static int player_index = 0;
@@ -36,7 +37,7 @@ static int get_move(GameState* game_state) {
     return message[0] - '0';
 }
 
-static void announce_game_winner(GameState* game_state) {
+static void announce_game_state(GameState* game_state) {
     char message[BUFFER_SIZE] = {0};
     int bytes_written = game_state_serialize(game_state, message, BUFFER_SIZE);
     server_socket_send(game_state->players[0].socket_fd, message, bytes_written);
@@ -85,12 +86,16 @@ int main() {
         if (game_state_check_winner(game_state)) {
             game_state->game_over = 1;
             printf("Client %d wins!\n", game_state->current_player_index + 1);
-            break;
+        } else if (game_state_is_full(game_state)) {
+            game_state->game_over = 1;
+            DECLARE_PLAYER_TIE(game_state);
+            printf("Board full. It's a tie!\n");
+        } else {
+            SWITCH_PLAYER(game_state);
         }
-        SWITCH_PLAYER(game_state);
     }
 
-    announce_game_winner(game_state);
+    announce_game_state(game_state);
 
     server_socket_close_client_socket(client_fd1);
     server_socket_close_client_socket(client_fd2);

@@ -89,6 +89,15 @@ int game_state_make_move(GameState* game_state, int column) {
     return 0;
 }
 
+int game_state_is_full(GameState* game_state) {
+    for (int column = 0; column < BOARD_COLS; column++) {
+        if (game_state->board[0][column] == EMPTY) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
 int game_state_serialize(const GameState *game_state, char *buffer, size_t buffer_size) {
     if (game_state == NULL || buffer == NULL) {
         return -1;

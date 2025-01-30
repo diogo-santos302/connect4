@@ -26,6 +26,16 @@ static GameState* receive_game_state(void) {
     return game_state_deserialize(message, BUFFER_SIZE);
 }
 
+static void print_game_result(GameState* game_state, int player_index) {
+    if (game_state->current_player_index == -1) {
+        printf("Board full. It's a tie!\n");
+    } else if (game_state->current_player_index != player_index) {
+        printf("You win!\n");
+    } else {
+        printf("You lose!\n");
+    }
+}
+
 int main(void) {
     printf("Starting client...\n");
     client_socket_init();
@@ -50,12 +60,8 @@ int main(void) {
             break;
         }
         game_state_print(game_state);
-    } 
-    if (game_state->current_player_index != player_index) {
-        printf("You win!\n");
-    } else {
-        printf("You lose!\n");
     }
+    print_game_result(game_state, player_index);
     client_socket_close();
     game_state_close(&game_state);
     return 0;
