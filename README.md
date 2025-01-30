@@ -23,7 +23,7 @@ This will generate the necessary binaries in the bin/ directory.
 The server will wait for two clients to connect.
 
 ## Start the Clients:
-Each client represents a player in the game. On two separate terminals or machines, run:
+Each client represents a player in the game. On two separate terminals, run:
 
 ```
 ./bin/client
